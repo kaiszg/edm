@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  hatespeech-score-microservice:
+    build: './hatespeech-score-microservice'
+    image: 'hatespeech-score-microservice'
+    ports:
+      - 5000:5000
+
+  hatespeech-detector-mysql:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=manage
+      - MYSQL_DATABASE=hatespeech-detector
+      - MYSQL_USER=dbuser
+      - MYSQL_PASSWORD=dbp4ss
+  hatespeech-detector-api:
+    build: './hatespeech-detector-api'
+    image: hatespeech-detector-api
+    depends_on:
+      - hatespeech-detector-mysql
+      - hatespeech-score-microservice
+    ports:
+      - 8080:8080
+    environment:
+      - SCORE_MICROSERVICE_HOST=hatespeech-score-microservice
+      - DATABASE_HOST=hatespeech-detector-mysql
+      - DATABASE_USER=dbuser
+      - DATABASE_PASSWORD=dbp4ss
+      - DATABASE_NAME=hatespeech-detector
+      - DATABASE_PORT=3306
+      
+#  hatespeech-detector-client:
+#    build: './hatespeech-detector-client'
+#    image: hatespeech-detector-client
+#    depends_on:
+#      - hatespeech-detector-api
+#    ports:
+#      - 80:80
+#    environment:
+#      - REST_API_URL_REPLACE=http://hatespeech-detector-api:8080

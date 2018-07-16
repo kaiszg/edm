@@ -1,0 +1,6 @@
+[submodule "hatespeech-detector-api"]
+	path = hatespeech-detector-api
+	url = https://github.com/kaiszg/hatespeech-detector-backend.git
+[submodule "hatespeech-detector-client"]
+	path = hatespeech-detector-client
+	url = https://github.com/kaiszg/hatespeech-detector-frontend.git
